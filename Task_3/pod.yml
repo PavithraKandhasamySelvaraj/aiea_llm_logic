@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssudars1-task3
+spec:
+  containers:
+    - name: ssudars1
+      image: centos:centos7
+      resources:
+        limits:
+          memory: 1Gi
+          cpu: 2
+        requests:
+          memory: 512Mi
+          cpu: 1
+      command: ["sh", "-c", "echo 'Im a new pod' && sleep infinity"]
+      volumeMounts:
+            - mountPath: /pvcvolume
+              name: ssudars1vol
+  volumes:
+        - name: ssudars1vol
+          persistentVolumeClaim:
+            claimName: ssudars1-task3

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssudars1-desktop
+  labels:
+    k8s-app: ssudars1-desktop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ssudars1-desktop
+  template:
+    metadata:
+      labels:
+        k8s-app: ssudars1-desktop
+    spec:
+      containers:
+        - name: ssudars1-desktop
+          image: nvidia/cuda:11.3.1-devel-ubuntu20.04
+          resources:
+            limits:
+              memory: 32Gi
+              cpu: "10"
+              nvidia.com/gpu: 1
+            requests:
+              memory: 32Gi
+              cpu: "10"
+              nvidia.com/gpu: 1
+          command: ["sh", "-c", "sleep infinity"]
+          volumeMounts:
+            - mountPath: /pvcvolume
+              name: ssudars1vol
+      volumes:
+        - name: ssudars1vol
+          persistentVolumeClaim:
+            claimName: ssudars1-task3

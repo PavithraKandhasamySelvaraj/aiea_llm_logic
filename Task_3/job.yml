@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ssudars1-task3
+spec:
+  template:
+    spec:
+      containers:
+      - name: ssudars1-task3
+        image: nvidia/cuda:12.1.1-cudnn8-devel-ubuntu20.04
+        command:
+        - sh
+        - -c
+        - "cd pvcvolume && sh setup.sh"
+        volumeMounts:
+        - name: pvcvolume
+          mountPath: /pvcvolume
+        resources:
+          limits:
+            memory: 32Gi
+            cpu: "10"
+            nvidia.com/gpu: 1
+          requests:
+            memory: 32Gi
+            cpu: "10"
+            nvidia.com/gpu: 1
+      volumes:
+      - name: pvcvolume
+        persistentVolumeClaim:
+          claimName: ssudars1-task3
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.product
+                operator: In
+                values:
+                - NVIDIA-A10
+      restartPolicy: Never
+  backoffLimit: 5
