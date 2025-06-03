@@ -156,12 +156,40 @@ def self_refinement(nl_problem, original_response, query_result, max_count=3):
     if query_result != "uncertain":
         return None, None, query_result, 0
 
+    last_response = original_response
     refine_counter = 0
     while refine_counter < max_count:
         refine_counter += 1
-        print(f"\n Attempt completed ", refine_counter)
 
-        refined_response = logic_solver(nl_problem)
+        feedback_prompt = f"""
+        You previously gave the below symbolic formulation as response for the problem:
+        problem: {nl_problem}
+        response : {last_response}
+
+        But, the symbolic solver was not able to produce the correct result and outputted 'uncertain'.
+
+        Please revise your Prolog facts, rules, and query so that the problem can be correctly resolved using logic programming.
+
+        Format the output exactly as:
+        FACTS:
+        <Prolog facts and rules>
+
+        QUERY:
+        ?- <Prolog query>.
+
+        Do not include any additional explanations or comments or headings.
+        """
+
+        refined_response = client.responses.create(
+            model="gpt-4o",
+            input=feedback_prompt
+        ).output_text
+
+        last_response = refined_response
+        
+        print(f"\n Refinement Attempt completed ", refine_counter)
+
+        # refined_response = logic_solver(nl_problem)
         facts, query = symbolic_formulator(refined_response)
         prolog_kb_creater(facts)
         query_result = classify_result("output.pl", query)
