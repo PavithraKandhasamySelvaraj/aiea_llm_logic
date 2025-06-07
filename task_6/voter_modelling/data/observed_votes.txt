@@ -1,0 +1,3 @@
+Alice	Democrat	1.0
+Frank	Republican	1.0
+Grace	Green	1.0 

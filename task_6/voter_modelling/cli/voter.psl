@@ -1,0 +1,22 @@
+// PSL Model for Voter Behavior Prediction
+
+// Predicates
+predicate Friend(Person, Person)
+predicate Spouse(Person, Person)
+predicate AgeSimilar(Person, Person)
+predicate VotesFor(Person, Party)
+
+// Rule 1: Friend influence (moderate weight)
+0.3: Friend(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2
+
+// Rule 2: Spouse influence (strong weight)  
+0.8: Spouse(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2
+
+// Rule 3: Age similarity influence (strongest weight)
+5.0: AgeSimilar(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2
+
+// Rule 4: Functional constraint (hard constraint)
+VotesFor(P, +PARTY) = 1.0 .
+
+// Rule 5: Negative prior (regularization)
+1.0: !VotesFor(P, PARTY) 

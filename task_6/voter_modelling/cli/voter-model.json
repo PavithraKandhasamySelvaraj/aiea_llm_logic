@@ -1,0 +1,49 @@
+{
+  "options": {},
+  "rules": [
+    "0.3: Friend(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2",
+    "0.8: Spouse(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2",
+    "5.0: AgeSimilar(P1, P2) & VotesFor(P1, PARTY) -> VotesFor(P2, PARTY) ^2",
+    "VotesFor(P, +PARTY) = 1.0 .",
+    "1.0: !VotesFor(P, PARTY)"
+  ],
+  "predicates": {
+    "Friend/2": {
+      "types": ["UniqueStringID", "UniqueStringID"],
+      "observations": {
+        "learn": ["../data/voter/0/learn/friends_obs.txt"],
+        "infer": ["../data/voter/0/eval/friends_obs.txt"]
+      }
+    },
+    "Spouse/2": {
+      "types": ["UniqueStringID", "UniqueStringID"],
+      "observations": {
+        "learn": ["../data/voter/0/learn/spouses_obs.txt"],
+        "infer": ["../data/voter/0/eval/spouses_obs.txt"]
+      }
+    },
+    "AgeSimilar/2": {
+      "types": ["UniqueStringID", "UniqueStringID"],
+      "observations": {
+        "learn": ["../data/voter/0/learn/age_similarity_obs.txt"],
+        "infer": ["../data/voter/0/eval/age_similarity_obs.txt"]
+      }
+    },
+    "VotesFor/2": {
+      "evaluations": ["DiscreteEvaluator"],
+      "types": ["UniqueStringID", "UniqueStringID"],
+      "observations": {
+        "learn": ["../data/voter/0/learn/votes_obs.txt"],
+        "infer": ["../data/voter/0/eval/votes_obs.txt"]
+      },
+      "targets": {
+        "learn": ["../data/voter/0/learn/votes_targets.txt"],
+        "infer": ["../data/voter/0/eval/votes_targets.txt"]
+      },
+      "truth": {
+        "learn": ["../data/voter/0/learn/votes_truth.txt"],
+        "infer": ["../data/voter/0/eval/votes_truth.txt"]
+      }
+    }
+  }
+}

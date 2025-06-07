@@ -1,0 +1,3 @@
+Alice	Bob	0.95
+Charlie	Dave	0.80
+Eve	Frank	0.45 
